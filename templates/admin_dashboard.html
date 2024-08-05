@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/styles.css" rel="stylesheet">
+    <style>
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .btn-custom {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-4">
+        <h2 class="text-center mb-4">Admin Dashboard</h2>
+        <div class="d-flex justify-content-between mb-3">
+            <a href="/admin/add-product" class="btn btn-success btn-custom">Tambah Produk</a>
+            <a href="/purchase" class="btn btn-info btn-custom">Transaksi Pembelian</a>
+            <a href="/login" class="btn btn-danger btn-custom" id="logout-button">Logout</a>
+        </div>
+        <div class="row">
+            {{range .}}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{.ImageURL}}" class="card-img-top" alt="{{.Name}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{.Name}}</h5>
+                        <p class="card-text">{{.Description}}</p>
+                        <p class="card-text">Stok: {{.Quantity}}</p>
+                        <p class="card-text">Harga: Rp{{.Price}}</p>
+                        <a href="/admin/edit-product?id={{.ID}}" class="btn btn-warning">Edit</a>
+                        <a href="/admin/delete-product?id={{.ID}}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('logout-button').addEventListener('click', function(event) {
+            if (!confirm('Anda yakin ingin keluar?')) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

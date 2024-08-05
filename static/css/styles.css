@@ -1,0 +1,17 @@
+.table th, .table td {
+    text-align: center;
+}
+
+.table th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table img {
+            max-width: 100px;
+            height: auto;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .btn {
+            margin-top: 1rem;
+        }
+        #change-amount {
+            font-weight: bold;
+        }
+        .out-of-stock {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Customer Dashboard</h1>
+        <a href="/login" class="btn btn-danger mb-3 float-right" id="logout-button">Logout</a>
+        <table class="table table-bordered table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Stok</th>
+                    <th>Deskripsi Produk</th>
+                    <th>Harga</th>
+                    <th>Gambar</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Quantity}}</td>
+                    <td>{{.Description}}</td>
+                    <td>Rp{{.Price}}</td>
+                    <td><img src="{{.ImageURL}}" class="img-thumbnail" alt="{{.Name}}"></td>
+                    <td>
+                        {{if .Quantity}}
+                        <form action="/customer/buy-product" method="post" id="purchase-form-{{.ID}}">
+                            <input type="hidden" name="product_id" value="{{.ID}}">
+                            <input type="hidden" name="price" value="{{.Price}}">
+                            <div class="form-group">
+                                <label for="quantity-{{.ID}}">Masukkan jumlah yang ingin dibeli:</label>
+                                <input type="number" id="quantity-{{.ID}}" name="quantity" class="form-control" min="1" max="{{.Quantity}}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="paid-amount-{{.ID}}">Masukkan uang yang ingin dibayar:</label>
+                                <input type="number" id="paid-amount-{{.ID}}" name="paid_amount" class="form-control" step="0.01" min="0" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Buy</button>
+                            <div id="change-amount-{{.ID}}" class="mt-2"></div>
+                        </form>
+                        {{else}}
+                        <p class="out-of-stock">Produk telah habis</p>
+                        {{end}}
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('input', function() {
+                const formId = this.id.split('-').pop();
+                const price = parseFloat(this.querySelector('input[name="price"]').value);
+                const quantity = parseFloat(this.querySelector('input[name="quantity"]').value);
+                const paidAmountField = document.getElementById('paid-amount-' + formId);
+                const changeAmountDiv = document.getElementById('change-amount-' + formId);
+                
+                if (paidAmountField && !isNaN(price) && !isNaN(quantity)) {
+                    const totalPrice = price * quantity;
+                    const paidAmount = parseFloat(paidAmountField.value) || 0;
+                    const changeAmount = paidAmount - totalPrice;
+                    changeAmountDiv.textContent = changeAmount >= 0 ? `Kembalian: Rp${changeAmount.toFixed(2)}` : 'Masukkan Uang.';
+                }
+            });
+        });
+
+        document.getElementById('logout-button').addEventListener('click', function(event) {
+            if (!confirm('Anda yakin ingin keluar?')) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

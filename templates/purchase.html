@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase History</title>
+  
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="/static/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Tabel Transaksi Pembelian</h1>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Nama Produk</th>
+                    <th>Stok</th>
+                    <th>Tanggal Pembelian</th>
+                    <th>Harga</th>
+                    <th>Total Harga</th>
+                    <th>Harga Bayar</th>
+                    <th>Kembalian</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Username}}</td>
+                    <td>{{.ProductName}}</td>
+                    <td>{{.Quantity}}</td>
+                    <td>{{.PurchasedAt}}</td>
+                    <td>Rp{{.Price}}</td>
+                    <td>Rp{{.TotalPrice}}</td>
+                    <td>Rp{{.PaidAmount}}</td>
+                    <td>Rp{{.ChangeAmount}}</td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="9" class="text-center">No purchases found.</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+        <a href="/admin/dashboard" class="btn btn-primary mt-3">Back to Dashboard</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
